@@ -21,9 +21,8 @@ const finalPathTileColor = '#f5ff5e'
 const startTileColor = 'green';
 const finalTileColor = 'red';
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// TILES CLASS
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 let startTile = -1;
 let endTile = -1;
 let previousStartTile = null;
@@ -111,7 +110,6 @@ class Tile {
 
   }
 
-  // Creates a tile as a div
   createElement = (size) => {
     const tile = document.createElement('div');
     tile.classList.add('tile');
@@ -209,11 +207,6 @@ class Tile {
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// CREATING GRID
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// Grid Size
 const gridSizeX = 37;
 const gridSizeY = 15;
 let tileNumber = gridSizeX * gridSizeY;
@@ -222,13 +215,12 @@ let editMode = true;
 let resetOn = false;
 let tileSize = updateTileSize();
 
-// Listen for changes in the width of the container
 window.addEventListener("resize", () => {
   const gridContainer = document.querySelector(".grid-container");
   let width = gridContainer.offsetWidth;
-  let height = width * 15 / 37; // Set height to be 15/37 of the width
+  let height = width * 15 / 37;
 	
-  gridContainer.style.height = `${height}px`; // Set the height of the container using the style property
+  gridContainer.style.height = `${height}px`;
   tileSize = width / 37 - 2;
   updateTileSize2();
 });
@@ -249,14 +241,12 @@ function updateTileSize() {
 
 let tileElementArray = [];
 
-// Creates the tile map
 const createTiles = () => {
   tileElementArray = [];
   tiles = [];
   const gridContainer = document.querySelector(".grid-container");
   gridContainer.innerHTML = "";
 
-  // Appends the tiles to the grid Container
   for (let i = 0; i < tileNumber; i++) {
     row = Math.floor(i / gridSizeX);
     col = i % gridSizeX;
@@ -269,24 +259,18 @@ const createTiles = () => {
 }
 
 const updateNeighbors = (tile, allTiles) => {
-  // Calculate the indices of the neighboring tiles
   const indices = [
-    tile.number - gridSizeX, // Top
-    tile.number + gridSizeX, // Bottom
-    tile.number - 1, // Left
-    tile.number + 1, // Right
+    tile.number - gridSizeX, 
+    tile.number + gridSizeX,
+    tile.number - 1,
+    tile.number + 1,
   ];
 
-  // Clear the existing neighbors array
   tile.neighbors = [];
 
-  // Add the neighboring tiles to the neighbors array
   indices.forEach((index) => {
-    // Check if the index is within the bounds of the array
     if (index >= 0 && index < tileNumber) {
       const neighbor = allTiles[index];
-
-      // Check if the neighbor is in the same row or column as the tile
       if (neighbor.row === tile.row || neighbor.col === tile.col) {
         if (!neighbor.isTileWall()) tile.neighbors.push(neighbor);
       }
@@ -300,7 +284,7 @@ const updateTileNeighbors = () => {
   }
 }
 
-// Resets the tile map
+
 async function reset() {
   openTiles = [];
   clickedOnToMove = -1;
@@ -319,7 +303,6 @@ async function reset() {
   createTiles();
 }
 
-// Changes the color of the tile
 let selectedColor = '';
 const changeColor = (color) => {
   selectedColor = color;
@@ -366,75 +349,6 @@ async function random(ratio) {
 
 
 
-/////////////////////////////////////////////
-// Info Stuff
-/////////////////////////////////////////////
-const openInfoButtons = document.querySelectorAll('[data-info-target]');
-const closeInfoButtons = document.querySelectorAll('[data-close-button]');
-const page1 = document.querySelector('.page1');
-const page2 = document.querySelector('.page2');
-const overlay = document.getElementById('overlay');
-
-openInfoButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const info = document.querySelector(button.dataset.infoTarget);
-    openInfo(info);
-  });
-});
-
-overlay.addEventListener('click', () => {
-  const infos = document.querySelectorAll('.info.active');
-  infos.forEach(info => {
-    closeInfo(info);
-  });
-});
-
-closeInfoButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const info = button.closest('.info');
-    closeInfo(info);
-  });
-});
-
-function openInfo (info) {
-  if (info == null) return;
-  info.classList.add('active');
-  overlay.classList.add('active');
-}
-
-function closeInfo (info) {
-  if (info == null) return;
-  info.classList.remove('active');
-  overlay.classList.remove('active');
-  setTimeout(() => {
-    resetPages();
-  }, 100);
-}
-
-function togglePages() {
-  page1.style.display = 'none';
-  page2.style.display = 'block';
-}
-
-function resetPages() {
-  page2.style.display = 'none';
-  page1.style.display = 'block';
-}
-
-
-
-
-
-
-
-
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Algorithms
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 let visitedTiles = []
 
 const buildGraph = () => {
@@ -467,16 +381,6 @@ const checkToStart = () => {
   return (endTile > -1 && startTile > -1);
 }
 
-
-
-
-
-
-
-
-///////////////////////
-// BFS
-///////////////////////
 
 const bfs = () => {
   resetOn = true;
@@ -536,8 +440,6 @@ async function bfsTime(delayTime) {
       }
     }
   }
-
-  // Color the path from end to start
   let node = endNode;
   while (node != startTile && !resetOn) {
     if (node !== endNode) {
@@ -574,15 +476,6 @@ const getCol = (num) => {
 }
 
 
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maze
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-let openTiles = [];
-
 async function maze() {
   reset();
   await delay(25);
@@ -611,24 +504,16 @@ async function maze() {
 const createMazeNeighbors = () => {
   for (let i = 0; i < openTiles.length; i++) {
     let tile = openTiles[i];
-    // Calculate the indices of the neighboring tiles
     const indices = [
-      tile.number - (gridSizeX * 2), // Top
-      tile.number + (gridSizeX * 2), // Bottom
-      tile.number - 2, // Left
-      tile.number + 2, // Right
+      tile.number - (gridSizeX * 2),
+      tile.number + (gridSizeX * 2), 
+      tile.number - 2, 
+      tile.number + 2,
     ];
-
-    // Clear the existing neighbors array
     tile.neighbors = [];
-
-    // Add the neighboring tiles to the neighbors array
     indices.forEach((index) => {
-      // Check if the index is within the bounds of the array
       if (index >= 0 && index < ((gridSizeX) * (gridSizeY))) {
         const neighbor = tiles[index];
-
-        // Check if the neighbor is in the same row or column as the tile
         if (neighbor.row === tile.row || neighbor.col === tile.col) {
           if (!neighbor.isTileWall()) tile.neighbors.push(neighbor);
         }

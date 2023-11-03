@@ -1,6 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maze
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 let openTiles = [];
 
 function maze() {
@@ -29,24 +27,16 @@ function maze() {
 const createMazeNeighbors = () => {
   for (let i = 0; i < openTiles.length; i++) {
     let tile = openTiles[i];
-    // Calculate the indices of the neighboring tiles
     const indices = [
-      tile.number - (gridSizeX * 2), // Top
-      tile.number + (gridSizeX * 2), // Bottom
-      tile.number - 2, // Left
-      tile.number + 2, // Right
+      tile.number - (gridSizeX * 2),
+      tile.number + (gridSizeX * 2), 
+      tile.number - 2,
+      tile.number + 2,
     ];
-
-    // Clear the existing neighbors array
     tile.neighbors = [];
-
-    // Add the neighboring tiles to the neighbors array
     indices.forEach((index) => {
-      // Check if the index is within the bounds of the array
       if (index >= 0 && index < ((gridSizeX) * (gridSizeY))) {
         const neighbor = tiles[index];
-
-        // Check if the neighbor is in the same row or column as the tile
         if (neighbor.row === tile.row || neighbor.col === tile.col) {
           if (!neighbor.isTileWall()) tile.neighbors.push(neighbor);
         }

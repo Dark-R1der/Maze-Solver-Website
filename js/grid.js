@@ -5,14 +5,11 @@ let tiles = [];
 let editMode = true;
 let resetOn = false;
 
-// Creates the tile map
 const createTiles = () => {
   tiles = [];
   const gridContainer = document.querySelector(".grid-container");
   gridContainer.innerHTML = "";
   const tileSize = 49;
-
-  // Appends the tiles to the grid Container
   for (let i = 0; i < tileNumber; i++) {
     row = Math.floor(i / gridSizeX);
     col = i % gridSizeX;
@@ -24,24 +21,16 @@ const createTiles = () => {
 }
 
 const updateNeighbors = (tile, allTiles) => {
-  // Calculate the indices of the neighboring tiles
   const indices = [
-    tile.number - gridSizeX, // Top
-    tile.number + gridSizeX, // Bottom
-    tile.number - 1, // Left
-    tile.number + 1, // Right
+    tile.number - gridSizeX, 
+    tile.number + gridSizeX,
+    tile.number - 1,
+    tile.number + 1, 
   ];
-
-  // Clear the existing neighbors array
   tile.neighbors = [];
-
-  // Add the neighboring tiles to the neighbors array
   indices.forEach((index) => {
-    // Check if the index is within the bounds of the array
     if (index >= 0 && index < tileNumber) {
       const neighbor = allTiles[index];
-
-      // Check if the neighbor is in the same row or column as the tile
       if (neighbor.row === tile.row || neighbor.col === tile.col) {
         if (!neighbor.isTileWall()) tile.neighbors.push(neighbor);
       }
@@ -55,7 +44,6 @@ const updateTileNeighbors = () => {
   }
 }
 
-// Resets the tile map
 async function reset() {
   openTiles = [];
   clickedOnToMove = -1;
@@ -73,8 +61,6 @@ async function reset() {
   selectedColor = '';
   createTiles();
 }
-
-// Changes the color of the tile
 let selectedColor = '';
 const changeColor = (color) => {
   selectedColor = color;
